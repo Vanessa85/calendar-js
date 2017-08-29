@@ -24,7 +24,6 @@
       var holidays = data.map(item => {
         return parseInt(item.date.split('-')[2]);
       });
-      console.log('holidays', holidays)
 
       var containerMonth = document.createElement('div');
       containerMonth.className = 'calendar-month';

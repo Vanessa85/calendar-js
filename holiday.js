@@ -1,4 +1,4 @@
-(function(window, document, $, undefined) {
+(function(window, document, undefined) {
   'use strict';
   var HOST = 'https://holidayapi.com/v1/holidays?key=2d2ab822-cb88-4829-84b0-c5f3b41d7bd3';
 
@@ -30,4 +30,4 @@
 
   window.getHolidays = getHolidays;
 
-})(window, document, window.jQuery);
+})(window, document);
