@@ -16,9 +16,16 @@
   }
 
   Calendar.prototype.draw = function() {
-    getHolidays(this.country, this.year, this.month).then((data) => {
-      console.log('data', data);
+    getHolidays(this.country, this.year, this.month)
+      .then(response => response.holidays)
+      .then((data) => {
       var i, span, text, index;
+      // holidays
+      var holidays = data.map(item => {
+        return parseInt(item.date.split('-')[2]);
+      });
+      console.log('holidays', holidays)
+
       var containerMonth = document.createElement('div');
       containerMonth.className = 'calendar-month';
       // header month
@@ -51,17 +58,24 @@
 
       for (i = 1; i <= 35; i++) { //35 = 7*5
         span = document.createElement('span');
+        // days added of the month
+        index = this.days.indexOf(i-firstWeekDay);
+        if (index !== -1) {
+          span.className = 'week-day';
+          text = document.createTextNode(this.days[index]);
+          span.appendChild(text);
+        }
+
         // days weekend: Sunday
         if (i % 7 === 1) {
           span.className = 'weekend-day';
         }
 
-        // days added of the month
-        index = this.days.indexOf(i-firstWeekDay);
-        if (index !== -1) {
-          span.className = (i % 7 === 1)? 'weekend-day' : 'week-day';
-          text = document.createTextNode(this.days[index]);
-          span.appendChild(text);
+        // holiday
+        if (holidays.indexOf(i-firstWeekDay) !== -1) {
+          if (span.className === 'week-day') {
+            span.className = 'week-holiday';
+          }
         }
 
         weekMonth.appendChild(span);

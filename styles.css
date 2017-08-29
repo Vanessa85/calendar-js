@@ -42,3 +42,7 @@ span.week-day {
 span.weekend-day {
   background: #7dda7d;
 }
+
+span.week-holiday {
+  background: red;
+}
