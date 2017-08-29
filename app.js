@@ -8,7 +8,8 @@
 
   // value default for startDate
   var today = new Date();
-  startDateInput.value = `${today.getFullYear()}-${formatNumber(today.getMonth()+1)}-${formatNumber(today.getDate())}`;
+  startDateInput.value = `${today.getFullYear()-1}-${formatNumber(today.getMonth()+1)}-${formatNumber(today.getDate())}`;
+  startDateInput.max = `${today.getFullYear()-1}-12-31`;
 
   // event submit
   form.addEventListener('submit', sendForm);
