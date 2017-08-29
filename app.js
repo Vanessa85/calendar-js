@@ -3,15 +3,19 @@
 
   var startDateInput = document.getElementById('startDate');
   var form = document.querySelector('.form-calendar');
+  var container = document.querySelector('#results');
   var milisecondsByDay = 1000*60*60*24;
 
   // value default for startDate
   var today = new Date();
   startDateInput.value = `${today.getFullYear()}-${formatNumber(today.getMonth()+1)}-${formatNumber(today.getDate())}`;
 
+  // event submit
   form.addEventListener('submit', sendForm);
   function sendForm(e) {
     e.preventDefault();
+    container.innerHTML = '';
+
     var startDateString = e.target.startDate.value;
     var days = e.target.days.value;
     var countryCode = e.target.countryCode.value;
@@ -19,14 +23,21 @@
     var startDate = generateDate(startDateString);
     var endDate = generateDate(startDateString, days);
 
-    let i;
+    var calendar = new Calendar(container, startDate.getFullYear(), startDate.getMonth());
+    var i;
     for (i = startDate.getTime(); i <= endDate.getTime(); i+=milisecondsByDay) {
       var currentDate = new Date();
       currentDate.setTime(i);
 
-      console.log('currentDate', currentDate.getDate())
+      if (currentDate.getDate() === 1) {
+        calendar.draw();
+        calendar = new Calendar(container, currentDate.getFullYear(), currentDate.getMonth());
+      }
 
+      calendar.addDay(currentDate.getDate());
     }
+
+    calendar.draw();
 
   }
 
@@ -47,7 +58,5 @@
 
     return date;
   }
-
-
 
 })(window, document);
