@@ -2,10 +2,43 @@ body {
   padding-top: 5rem;
 }
 
+#results {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.calendar-month {
+  margin-bottom: 30px;
+}
+
+.calendar-month header {
+  text-align: center;
+}
+
+.calendar-month div.week-header > span {
+  background: white;
+}
+
+.week-month {
+  display: flex;
+  margin-bottom: 2px
+}
+
 .calendar-month span {
   height: 30px;
   width: 30px;
+  line-height: 30px;
+  margin-right: 2px;
   background: #ccc;
   display: inline-block;
   text-align: center;
+}
+
+span.week-day {
+  background: yellow;
+}
+
+span.weekend-day {
+  background: #7dda7d;
 }
