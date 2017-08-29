@@ -23,7 +23,7 @@
     var startDate = generateDate(startDateString);
     var endDate = generateDate(startDateString, days);
 
-    var calendar = new Calendar(container, startDate.getFullYear(), startDate.getMonth());
+    var calendar = new Calendar(container, countryCode, startDate.getFullYear(), startDate.getMonth());
     var i;
     for (i = startDate.getTime(); i <= endDate.getTime(); i+=milisecondsByDay) {
       var currentDate = new Date();
@@ -31,7 +31,7 @@
 
       if (currentDate.getDate() === 1) {
         calendar.draw();
-        calendar = new Calendar(container, currentDate.getFullYear(), currentDate.getMonth());
+        calendar = new Calendar(container, countryCode, currentDate.getFullYear(), currentDate.getMonth());
       }
 
       calendar.addDay(currentDate.getDate());
