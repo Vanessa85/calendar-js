@@ -1,6 +1,6 @@
 (function(window, document, undefined) {
   'use strict';
-  var HOST = 'https://holidayapi.com/v1/holidays?key=2d2ab822-cb88-4829-84b0-c5f3b41d7bd3';
+  var HOST = 'https://holidayapi.com/v1/holidays?key=abf70bac-0976-400e-a58e-b9517f4d6ad1';
 
   function getHolidays(code, year, month) {
     month = month < 10? `0${month}` : month;

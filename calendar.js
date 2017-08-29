@@ -16,13 +16,16 @@
   }
 
   Calendar.prototype.draw = function() {
-    getHolidays(this.country, this.year, this.month)
+    getHolidays(this.country, this.year, this.month+1)
       .then(response => response.holidays)
       .then((data) => {
-      var i, span, text, index;
+      var i, span, text, index, holiday;
       // holidays
-      var holidays = data.map(item => {
-        return parseInt(item.date.split('-')[2]);
+      this.holidays = data.map(item => {
+        return {
+          day: parseInt(item.date.split('-')[2]),
+          name: item.name
+        };
       });
 
       var containerMonth = document.createElement('div');
@@ -71,9 +74,11 @@
         }
 
         // holiday
-        if (holidays.indexOf(i-firstWeekDay) !== -1) {
-          if (span.className === 'week-day') {
+        holiday = this.holidays.find(item => item.day === i-firstWeekDay);
+        if (holiday) {
+          if (span.className === 'week-day' || span.className === 'weekend-day') {
             span.className = 'week-holiday';
+            span.setAttribute('title', holiday.name);
           }
         }
 

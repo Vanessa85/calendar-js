@@ -44,5 +44,6 @@ span.weekend-day {
 }
 
 span.week-holiday {
-  background: red;
+  background: orange;
+  cursor: pointer;
 }
