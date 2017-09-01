@@ -1,4 +1,4 @@
-(function(window, document, undefined) {
+(function(window, document, fetch, undefined) {
   'use strict';
 
   var startDateInput = document.getElementById('startDate');
@@ -6,9 +6,12 @@
   var container = document.querySelector('#results');
   var milisecondsByDay = 1000*60*60*24;
 
+  // to call methods utilities
+  var fnUtils = utils();
+
   // value default for startDate
   var today = new Date();
-  startDateInput.value = `${today.getFullYear()-1}-${formatNumber(today.getMonth()+1)}-${formatNumber(today.getDate())}`;
+  startDateInput.value = `${today.getFullYear()-1}-${fnUtils.formatNumber(today.getMonth()+1)}-${fnUtils.formatNumber(today.getDate())}`;
   startDateInput.max = `${today.getFullYear()-1}-12-31`;
 
   // event submit
@@ -21,43 +24,49 @@
     var days = e.target.days.value;
     var countryCode = e.target.countryCode.value;
 
-    var startDate = generateDate(startDateString);
-    var endDate = generateDate(startDateString, days);
+    var startDate = fnUtils.generateDate(startDateString);
+    var endDate = fnUtils.generateDate(startDateString, days);
 
     var calendar = new Calendar(container, countryCode, startDate.getFullYear(), startDate.getMonth());
-    var i;
+    var i, currentDate;
     for (i = startDate.getTime(); i <= endDate.getTime(); i+=milisecondsByDay) {
-      var currentDate = new Date();
+      currentDate = new Date();
       currentDate.setTime(i);
 
       if (currentDate.getDate() === 1) {
-        calendar.draw();
-        calendar = new Calendar(container, countryCode, currentDate.getFullYear(), currentDate.getMonth());
+        if (startDate.getTime() !== currentDate.getTime()) {
+          calendar.draw();
+          calendar = new Calendar(container, countryCode, currentDate.getFullYear(), currentDate.getMonth());
+        }
       }
 
       calendar.addDay(currentDate.getDate());
     }
 
     calendar.draw();
-
   }
 
-  function formatNumber(number) {
-    if (number < 10) {
-      number = `0${number}`
+  function utils() {
+    function formatNumber(number) {
+      return (number < 10? `0${number}` : number);
     }
 
-    return number;
-  }
+    function generateDate(dateString, days) {
+      dateString = dateString.split('-');
+      var date = new Date(dateString[0], dateString[1]-1, dateString[2]);
+      if (days) {
+        date.setDate(date.getDate() + Number(days));
+      }
 
-  function generateDate(dateString, days) {
-    dateString = dateString.split('-');
-    let date = new Date(dateString[0], dateString[1]-1, dateString[2]);
-    if (days) {
-      date.setDate(date.getDate() + Number(days));
+      return date;
     }
 
-    return date;
+    var publicUtils = {
+      formatNumber: formatNumber,
+      generateDate: generateDate
+    };
+
+    return publicUtils;
   }
 
-})(window, document);
+})(window, document, window.fetch);
