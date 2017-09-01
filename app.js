@@ -27,24 +27,33 @@
     var startDate = fnUtils.generateDate(startDateString);
     var endDate = fnUtils.generateDate(startDateString, days);
 
+    console.time('timecalendar');
+    drawCalendar(container, countryCode, startDate, endDate);
+    console.timeEnd('timecalendar');
+  }
+
+
+  function drawCalendar(container, countryCode, startDate, endDate) {
+    if (startDate.getTime() > endDate.getTime()) {
+      return;
+    }
+
     var calendar = new Calendar(container, countryCode, startDate.getFullYear(), startDate.getMonth());
-    var i, currentDate;
-    for (i = startDate.getTime(); i <= endDate.getTime(); i+=milisecondsByDay) {
+    var i, currentDate, endMonth;
+    endMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+
+    for (i = startDate.getTime(); i <= endDate.getTime() && i <= endMonth.getTime(); i+=milisecondsByDay) {
       currentDate = new Date();
       currentDate.setTime(i);
-
-      if (currentDate.getDate() === 1) {
-        if (startDate.getTime() !== currentDate.getTime()) {
-          calendar.draw();
-          calendar = new Calendar(container, countryCode, currentDate.getFullYear(), currentDate.getMonth());
-        }
-      }
-
       calendar.addDay(currentDate.getDate());
     }
 
-    calendar.draw();
+    calendar.draw().then(() => {
+      startDate.setTime(i);
+      return drawCalendar(container, countryCode, startDate, endDate);
+    });
   }
+
 
   function utils() {
     function formatNumber(number) {

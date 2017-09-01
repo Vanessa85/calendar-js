@@ -4,7 +4,7 @@
   var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Octuber', 'November', 'December'];
 
   function getHolidays(country, year, month) {
-    var HOST = 'https://holidayapi.com/v1/holidays?key=abf70bac-0976-400e-a58e-b9517f4d6ad1';
+    var HOST = 'https://holidayapi.com/v1/holidays?key=4f983a2a-eff0-4458-a4be-9a61024bee28';
     month = month < 10? `0${month}` : month;
     var url = `${HOST}&country=${country}&year=${year}&month=${month}`;
 
@@ -42,7 +42,7 @@
   }
 
   Calendar.prototype.draw = function() {
-    getHolidays(this.country, this.year, this.month+1)
+    return getHolidays(this.country, this.year, this.month+1)
       .then(response => response.holidays)
       .then(data => {
         var span;
@@ -120,6 +120,7 @@
 
           weekMonth.appendChild(span);
         }
+        
       });
   }
 
