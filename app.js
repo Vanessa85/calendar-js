@@ -1,18 +1,16 @@
-(function(window, document, fetch, undefined) {
+(function(window, document, undefined) {
   'use strict';
 
   var startDateInput = document.getElementById('startDate');
   var form = document.querySelector('.form-calendar');
   var container = document.querySelector('#results');
-  var milisecondsByDay = 1000*60*60*24;
 
   // to call methods utilities
   var fnUtils = utils();
 
   // value default for startDate
-  var today = new Date();
-  startDateInput.value = `${today.getFullYear()-1}-${fnUtils.formatNumber(today.getMonth()+1)}-${fnUtils.formatNumber(today.getDate())}`;
-  startDateInput.max = `${today.getFullYear()-1}-12-31`;
+  fnUtils.setInputDate.call(startDateInput);
+  // fnUtils.setInputMax.call(document.querySelector('[type=number]'));
 
   // event submit
   form.addEventListener('submit', sendForm);
@@ -32,12 +30,12 @@
     console.timeEnd('timecalendar');
   }
 
-
   function drawCalendar(container, countryCode, startDate, endDate) {
     if (startDate.getTime() > endDate.getTime()) {
       return;
     }
 
+    var milisecondsByDay = 1000*60*60*24;
     var calendar = new Calendar(container, countryCode, startDate.getFullYear(), startDate.getMonth());
     var i, currentDate, endMonth;
     endMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
@@ -56,6 +54,20 @@
 
 
   function utils() {
+
+    function setInputDate() {
+      var today = new Date();
+      this.value = `${today.getFullYear()-1}-${formatNumber(today.getMonth()+1)}-${formatNumber(today.getDate())}`;
+      this.max = `${today.getFullYear()-1}-12-31`;
+    }
+
+    // function setInputMax() {
+    //   var today = new Date();
+    //   var lastDateYear = new Date(today.getFullYear(), 12, 0);
+    //   var days = Math.floor((lastDateYear - today)/(1000*60*60*24));
+    //   this.max = days + 1;
+    // }
+
     function formatNumber(number) {
       return (number < 10? `0${number}` : number);
     }
@@ -71,6 +83,8 @@
     }
 
     var publicUtils = {
+      setInputDate: setInputDate,
+      // setInputMax: setInputMax,
       formatNumber: formatNumber,
       generateDate: generateDate
     };
@@ -78,4 +92,4 @@
     return publicUtils;
   }
 
-})(window, document, window.fetch);
+})(window, document);

@@ -1,32 +1,7 @@
-(function(window, document, undefined) {
+(function(window, document, fetch, undefined) {
   'use strict';
 
   var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Octuber', 'November', 'December'];
-
-  function getHolidays(country, year, month) {
-    var HOST = 'https://holidayapi.com/v1/holidays?key=4f983a2a-eff0-4458-a4be-9a61024bee28';
-    month = month < 10? `0${month}` : month;
-    var url = `${HOST}&country=${country}&year=${year}&month=${month}`;
-
-    if (fetch) {
-      return fetch(url).then(response => response.json());
-    } else {
-      return new Promise(function(resolve, reject) {
-        var ajax = new XMLHttpRequest();
-        ajax.open('GET', url, true);
-        ajax.send(null);
-        ajax.onreadystatechange = function() {
-          if (ajax.readyState === 4) {
-            if (ajax.status == 200) {
-              resolve(JSON.parse(ajax.response));
-            } else {
-              reject(new Error('Error request holidays'));
-            }
-          }
-        }
-      });
-    }
-  }
 
   function Calendar(container, country, year, month) {
     this.year = year;
@@ -120,10 +95,35 @@
 
           weekMonth.appendChild(span);
         }
-        
+
       });
+  }
+
+  function getHolidays(country, year, month) {
+    var HOST = 'https://holidayapi.com/v1/holidays?key=4f983a2a-eff0-4458-a4be-9a61024bee28';
+    month = month < 10? `0${month}` : month;
+    var url = `${HOST}&country=${country}&year=${year}&month=${month}`;
+
+    if (fetch) {
+      return fetch(url).then(response => response.json());
+    } else {
+      return new Promise(function(resolve, reject) {
+        var ajax = new XMLHttpRequest();
+        ajax.open('GET', url, true);
+        ajax.send(null);
+        ajax.onreadystatechange = function() {
+          if (ajax.readyState === 4) {
+            if (ajax.status == 200) {
+              resolve(JSON.parse(ajax.response));
+            } else {
+              reject(new Error('Error request holidays'));
+            }
+          }
+        }
+      });
+    }
   }
 
   window.Calendar = Calendar;
 
-})(window, document);
+})(window, document, window.fetch);
